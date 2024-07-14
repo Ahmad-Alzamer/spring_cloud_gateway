@@ -1,0 +1,45 @@
+### randomuser request
+GET http://localhost:8080/random-user/api/?results=1
+Accept: application/json
+
+### JSON placeholder request
+GET http://localhost:8080/json-placeholder/api/users
+Accept: application/json
+
+### http-bin
+GET http://localhost:8080/http-bin/test-123
+Accept: application/json
+
+
+
+
+### post data to http bin
+POST http://localhost:8080/http-bin/test
+Content-Type: multipart/form-data;boundary="WebAppBoundary"
+
+--WebAppBoundary
+Content-Disposition: form-data; name="form"
+Content-Type: application/json
+
+{"name": "Ahmad", "dob": "1988-06-03"}
+--WebAppBoundary
+Content-Disposition: form-data; name="attachment"; filename="file-sample_100kB.doc"
+Content-Type: application/msword
+
+< ./files/file-sample_100kB.doc
+--WebAppBoundary--
+
+
+
+
+
+
+### post data to http bin
+POST http://localhost:8080/http-bin/2/test
+Content-Type: application/json
+
+{"first-name": "Ahmad", "last-name": "Alzamer"}
+
+
+### actuator health
+GET http://localhost:8080/actuator/health/downstream-services

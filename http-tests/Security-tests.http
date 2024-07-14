@@ -1,0 +1,121 @@
+### GET endpoint requires a read-only permission
+### below should return 403
+GET http://localhost:8080/secured
+Authorization: Basic write-only write-only*
+
+> {%
+    client.test("should receive 403", function() {
+        client.assert(response.status === 403, "Response status is not 403");
+    });
+%}
+
+
+### below should return 401 since no credential were provided
+GET http://localhost:8080/secured
+
+> {%
+    client.test("should receive 401", function() {
+        client.assert(response.status === 401, "Response status is not 401");
+    });
+%}
+
+
+### below should return 401 since no credential were provided
+GET http://localhost:8080/secured/test
+Authorization: Basic read-only read-only*
+
+> {%
+    client.test("should receive 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+
+
+### HEAD endpoint requires a read-only permission
+### below should return 403
+HEAD http://localhost:8080/secured
+Authorization: Basic write-only write-only*
+
+> {%
+    client.test("should receive 403", function() {
+        client.assert(response.status === 403, "Response status is not 403");
+    });
+%}
+
+
+### below should return 401 since no credential were provided
+HEAD http://localhost:8080/secured
+
+> {%
+    client.test("should receive 401", function() {
+        client.assert(response.status === 401, "Response status is not 401");
+    });
+%}
+
+
+### below should return 401 since no credential were provided
+HEAD http://localhost:8080/secured/test
+Authorization: Basic read-only read-only*
+
+> {%
+    client.test("should receive 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+
+### POST endpoint requires a read-only permission
+### below should return 403
+POST http://localhost:8080/secured
+Authorization: Basic read-only read-only*
+content-type: application/json
+
+{"user": "zmr"}
+
+> {%
+    client.test("should receive 403", function() {
+        client.assert(response.status === 403, "Response status is not 403");
+    });
+%}
+
+
+### below should return 401 since no credential were provided
+POST http://localhost:8080/secured
+content-type: application/json
+
+{"user": "zmr"}
+
+> {%
+    client.test("should receive 401", function() {
+        client.assert(response.status === 401, "Response status is not 401");
+    });
+%}
+
+
+### below should return 401 since no credential were provided
+POST http://localhost:8080/secured
+Authorization: Basic write-only write-only*
+content-type: application/json
+
+{"user": "zmr"}
+
+> {%
+    client.test("should receive 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+
+### below should return 200 since super-user has super-role which grants all authorities
+POST http://localhost:8080/secured
+Authorization: Basic super-user super-user*
+content-type: application/json
+
+{"user": "zmr-{{$random.uuid}}"}
+
+> {%
+    client.test("should receive 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}

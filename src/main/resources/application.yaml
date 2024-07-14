@@ -1,0 +1,134 @@
+spring:
+  application:
+    name: spring_cloud_gateway
+  cloud:
+    gateway:
+      httpserver:
+        wiretap: true
+      httpclient:
+        wiretap: true
+      routes:
+        - id: random-user
+          uri: https://randomuser.me
+          predicates:
+            - Path=/random-user/**
+          filters:
+            - RewritePath=/random-user/?(?<segment>.*), /$\{segment}
+#            - SetDynamicRequestHeader=API_KEY,"KEY "," z",randomUserApiKey
+            - name: SetDynamicRequestHeader
+              args:
+                name: Authorization
+                valuePrefix: "Bearer "
+                valuePostfix: " z"
+                supplier: randomUserJwtAccessTokens
+            - MetadataDrivenLogic
+            - Logging
+          metadata:
+            http-client: customClient1
+        - id: json-placeholder
+          uri: https://jsonplaceholder.typicode.com
+          predicates:
+            - Path=/json-placeholder/**
+          filters:
+            - RewritePath=/json-placeholder/api/?(?<segment>.*), /$\{segment}
+#            - SetDynamicRequestHeader=API_KEY,"KEY "," z",randomUserApiKey
+            - name: SetDynamicRequestHeader
+              args:
+                name: Authorization
+                valuePrefix: "Bearer "
+                valuePostfix: " y"
+                supplier: jsonPlaceholderJwtAccessTokens2
+            - MetadataDrivenLogic
+            - Logging
+          metadata:
+            http-client: customClient2
+        - id: http-bin-get
+          uri: https://httpbin.org/get
+          predicates:
+            - Path=/http-bin/{some-id}
+            - Method=GET
+          filters:
+            - SetPath=/get
+            - AddRequestHeader=X-TEST,{some-id}
+        - id: http-bin
+          uri: https://httpbin.org/post
+          predicates:
+            - Path=/http-bin/{some-id}
+            - Method=POST
+          filters:
+            - SetPath=/post
+            - AddRequestHeader=X-TEST,{some-id}
+            - TestModifyRequestBody
+            - RequestTransformation
+        - id: http-bin-2
+          uri: https://httpbin.org/post
+          predicates:
+            - Path=/http-bin/2/{some-id}
+            - Method=POST
+          filters:
+            - SetPath=/post
+            - AddRequestHeader=X-TEST,{some-id}
+            - CustomModifyJsonBody
+#            - name: ModifyRequestBody
+#              args:
+#                inClass: java.lang.String
+#                outClass: java.lang.String
+#                rewriteFunction: com.example.spring_cloud_gateway.services.RewriteApplicationJson
+#                contentType: application/json
+        - id: secured
+          uri: https://httpbin.org
+          predicates:
+            - Path=/secured/**
+          filters:
+            - PrefixPath=/anything
+            - AddUserHeader
+            - RemoveRequestHeader=Authorization
+
+logging:
+  level:
+    com.example.spring_cloud_gateway: TRACE
+    org.springframework.security: TRACE
+  pattern:
+#    console: ${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}
+    console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%logger){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD: %wEx}"
+#    reactor.netty: TRACE
+#    org.springframework.cloud.gateway: DEBUG
+#    org.springframework.http.server.reactive: DEBUG
+#    org.springframework.web.reactive: DEBUG
+#    org.springframework.boot.autoconfigure.web: DEBUG
+#    redisratelimiter: DEBUG
+#    org.springframework.web.HttpLogging: TRACE
+#    reactor.netty.http.server: DEBUG
+#    reactor.netty.http.client: DEBUG
+
+
+
+apis:
+  json-placeholder:
+    base-url: https://jsonplaceholder.typicode.com
+    oauth2:
+      protected-resource-uri: test-1234
+      client-id: spring-cloud-gateway
+      usernmae: test
+      password: test
+      response_type: code
+      scope: random-user
+      redirect-uri: some-redirect-uri
+  random-user:
+    base-url: https://randomuser.me
+    oauth2:
+      protected-resource-uri: test-567
+      client-id: spring-cloud-gateway
+      usernmae: test2
+      password: test2
+      response_type: code
+      scope: random-password
+      redirect-uri: some-redirect-uri-2
+
+management:
+  endpoint:
+    health:
+      show-details: always
+      group:
+        downstream-services:
+          include: randomUser, jsonPlaceHolder

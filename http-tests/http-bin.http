@@ -1,0 +1,10 @@
+GET https://httpbin.org/anything?test=12
+content-type: application/json
+
+{"sender": "zmr"}
+
+###
+https://httpbin.org/get?test=12
+content-type: application/json
+
+{"sender": "zmr"}
