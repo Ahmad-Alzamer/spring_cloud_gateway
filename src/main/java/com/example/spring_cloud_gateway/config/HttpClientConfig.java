@@ -1,22 +1,13 @@
 package com.example.spring_cloud_gateway.config;
 
 import com.example.spring_cloud_gateway.config.properties.Oauth2;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
-import org.springframework.cloud.gateway.config.HttpClientCustomizer;
-import org.springframework.cloud.gateway.config.HttpClientFactory;
-import org.springframework.cloud.gateway.config.HttpClientProperties;
-import org.springframework.cloud.gateway.config.HttpClientSslConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Configuration
 public class HttpClientConfig {

@@ -8,10 +8,8 @@ import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFac
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.HasRouteId;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR;
 

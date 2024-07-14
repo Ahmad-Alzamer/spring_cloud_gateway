@@ -4,21 +4,14 @@ import com.example.spring_cloud_gateway.services.RequestBodyRewrite;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.cloud.gateway.filter.factory.rewrite.CachedBodyOutputMessage;
 import org.springframework.cloud.gateway.filter.factory.rewrite.ModifyRequestBodyGatewayFilterFactory;
-import org.springframework.cloud.gateway.support.BodyInserterContext;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.http.codec.multipart.Part;
-import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.HandlerStrategies;
 import org.springframework.web.reactive.function.server.ServerRequest;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component

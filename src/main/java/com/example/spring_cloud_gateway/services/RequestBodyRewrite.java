@@ -3,13 +3,9 @@ package com.example.spring_cloud_gateway.services;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.factory.rewrite.RewriteFunction;
-import org.springframework.http.codec.multipart.Part;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
 
 @Component
 @Slf4j
