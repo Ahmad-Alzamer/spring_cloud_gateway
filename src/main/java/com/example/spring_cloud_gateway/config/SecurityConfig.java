@@ -16,6 +16,9 @@ import org.springframework.security.core.userdetails.MapReactiveUserDetailsServi
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +29,16 @@ import java.util.stream.Stream;
 @EnableWebFluxSecurity
 @Configuration
 public class SecurityConfig {
-
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(){
+        var corsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        var corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedHeaders(List.of("test","Authorization"));
+        corsConfiguration.setAllowedOrigins(List.of("*"));
+        corsConfiguration.setAllowedMethods(List.of("*"));
+        corsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+        return corsConfigurationSource;
+    }
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, RoleHierarchy roleHierarchy){
 
